@@ -52,6 +52,6 @@ pip uninstall torch torchvision torchaudio
 
 Then, please go to https://pytorch.org/get-started/locally/ and select the desired PyTorch build (most recent stable one will be offered), your OS,
 the package installation method (pip suggested), the language, and the correct CUDA version you have installed. Then, copy the given command and run it. This will
-install a version of torch, torchvision, and torch audio that work with the CUDA version installed on your machine.
+install versions of torch, torchvision, and torch audio that work with the CUDA version installed on your machine.
 
 If issues persist, continue playing around with versions of CUDA and torch, following the CUDA intallation guide precisely.

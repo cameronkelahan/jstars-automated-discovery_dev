@@ -93,7 +93,9 @@ def write_out_lroc_raw_urls(feature_str, lroc_raw_ids_list):
     """Write out lroc_raw_urls file from lroc_raw_ids_list, calling the PDS
     to translate from lroc raw ids to lroc raw urls.
     """
-    out_lroc_raws_urls_fp = f"/tmp/lroc_raws_feature_{feature_str}_urls.lst"
+    if not os.path.exists("lam/tmp"):
+        os.makedirs("lam/tmp")
+    out_lroc_raws_urls_fp = os.path.normpath(f"./lam/tmp/lroc_raws_feature_{feature_str}_urls.lst")
     if os.path.exists(out_lroc_raws_urls_fp):
         os.remove(out_lroc_raws_urls_fp)
     search_url_base = "https://wms.lroc.asu.edu/lroc/view_lroc/LRO-L-LROC-3-CDR-V1.0/"
@@ -121,14 +123,14 @@ def write_out_lroc_raw_urls(feature_str, lroc_raw_ids_list):
                 if link_href[-8:] == "_pyr.tif":
                     logging.debug(link_href)
                     break
-            out_file.write("http:" + link_href + os.linesep)
+            out_file.write("http:" + link_href + "\n")
     return out_lroc_raws_urls_fp
 
 
 def download_lroc_raws(feature_str, out_lroc_raws_urls_fp, download_raws_bool):
     """Downloads lroc_raws from feature_str and out_lroc_raws_urls_fp, calling
     network_get to download the lroc_raws."""
-    lroc_raws_save_fp = os.path.join("data", "raw", feature_str, "class_0")
+    lroc_raws_save_fp = os.path.normpath(os.path.join("data", "raw", feature_str, "class_0"))
     if download_raws_bool:
         if os.path.exists(lroc_raws_save_fp):
             shutil.rmtree(lroc_raws_save_fp)
@@ -147,9 +149,9 @@ def download_lroc_raws(feature_str, out_lroc_raws_urls_fp, download_raws_bool):
 
 def inference_on_lroc_raws(feature_str, lroc_raws_save_fp, model_fp, inference_bool):
     """Inference on lroc_raws from feature_str, lroc_raws_save_fp, model_fp."""
-    out_inference_fp = os.path.join("data", "processed", feature_str)
+    out_inference_fp = os.path.normpath(os.path.join("data", "processed", feature_str))
     if inference_bool:
-        lroc_raws_save_fp = "/".join(lroc_raws_save_fp.split("/")[:-1])
+        lroc_raws_save_fp = os.path.normpath(os.sep.join(lroc_raws_save_fp.split(os.sep)[:-1]))
         logging.debug(f"lroc_raws_save_fp: {lroc_raws_save_fp}")
         try:
             inference(
@@ -180,7 +182,7 @@ def generate_anom_scores_and_labels(label_lines, out_inference_fp):
         logging.debug("label_line is %s", label_line)
         lroc_id, label_x_pixel, label_y_pixel = label_line
         with open(
-            os.path.join(out_inference_fp, lroc_id + ".lam"), "r", encoding="utf-8"
+            os.path.normpath(os.path.join(out_inference_fp, lroc_id + ".lam")), "r", encoding="utf-8"
         ) as lam_file:
             head = [next(lam_file).strip() for _ in range(9)]
             logging.debug("head is %s", head)
@@ -720,9 +722,9 @@ def get_top_n_and_random_n_lines(
     logging.info("Getting top n and random n lines from feature_str %s", feature_str)
     logging.info("top_n is %s", top_n)
 
-    lam_dir = os.path.join("data", "processed")
+    lam_dir = os.path.normpath(os.path.join("data", "processed"))
 
-    csv_fp = os.path.join(lam_dir, "lams_to_csvs", f"lams_to_csv_{feature_str}.csv")
+    csv_fp = os.path.normpath(os.path.join(lam_dir, "lams_to_csvs", f"lams_to_csv_{feature_str}.csv"))
     if not os.path.exists(csv_fp):
         csv_fp = lam_to_csv(feature_str=feature_str, lam_dir=lam_dir, out_csv_fp=csv_fp)
 
@@ -1567,7 +1569,7 @@ if __name__ == "__main__":
 
     # Setup
     args = parser.parse_args()
-    labels_filepath = os.path.join(args.labels_home, args.feature_str + "_labels.csv")
+    labels_filepath = os.path.normpath(os.path.join(args.labels_home, args.feature_str + "_labels.csv"))
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
@@ -1578,11 +1580,11 @@ if __name__ == "__main__":
     )
     logging.info("args are %s", args)
     logging.info("labels_filepath is %s", labels_filepath)
-    logging.info("args.model_fp is: %s", args.model_fp)
+    logging.info("args.model_fp is: %s", os.path.normpath(args.model_fp))
 
     main(
         labels_fp=labels_filepath,
-        model_fp=args.model_fp,
+        model_fp=os.path.normpath(args.model_fp),
         feature_str=args.feature_str,
         download_raws_bool=args.download_raws,
         inference_bool=args.inference,

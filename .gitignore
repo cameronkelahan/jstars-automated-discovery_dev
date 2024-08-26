@@ -4,6 +4,9 @@ data/raw/
 models/
 notes_usr/
 results/
+lam/tmp/
+# custom venv
+jst/
 
 # Vim swap files
 *.sw*

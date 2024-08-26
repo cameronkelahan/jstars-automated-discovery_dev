@@ -205,9 +205,9 @@ def main(feature_str=None, lam_dir=None, out_csv_fp=None):
     if lam_dir is None:
         lam_dir = "data/processed/"
     if out_csv_fp is None:
-        out_csv_fp = "data/processed/lam_to_csvs/lam_to_csv_{}.csv".format(feature_str)
+        out_csv_fp = os.path.normpath("data/processed/lam_to_csvs/lam_to_csv_{}.csv".format(feature_str))
 
-    log_filepath = os.path.join("logs", f"lam_to_csv_{time.time()}.log")
+    log_filepath = os.path.normpath(os.path.join("logs", f"lam_to_csv_{time.time()}.log"))
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",

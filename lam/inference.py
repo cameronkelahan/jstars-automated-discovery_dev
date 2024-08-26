@@ -33,13 +33,13 @@ from data_inf import InfDataset, InfDataLoader
 import vae_cnn
 
 default_args = {
-    "raw_imgs_fp": os.path.join("/", "nvme", "raws"),
-    "model_fp": os.path.join(
+    "raw_imgs_fp": os.path.normpath(os.path.join(os.sep, "data", "raw")),
+    "model_fp": os.path.normpath(os.path.join(
         "models",
         "train1_arts_exp_time_1646954340__stage_iii_train1"
         "_squares_2K_debug_models_model_eoe_5.pt",
-    ),
-    "out_fp_base": os.path.join("data", "processed"),
+    )),
+    "out_fp_base": os.path.normpath(os.path.join("data", "processed")),
     "exp_str": "stage_3_inference",
     "loss_lambda": 4.0,
     "batch_size": 2 ** 11,
@@ -68,7 +68,7 @@ def main(
     random.seed(default_args["seed"])
     np.random.seed(default_args["seed"])
 
-    exp_dir_fp = os.path.join("results", exp_str + "_time_" + str(int(time.time())))
+    exp_dir_fp = os.path.normpath(os.path.join("results", exp_str + "_time_" + str(int(time.time()))))
     os.makedirs(exp_dir_fp)
 
     cuda = torch.torch.cuda.is_available()
@@ -88,7 +88,7 @@ def main(
     anom_scores = {}
     reconstruction_loss_metric = torch.nn.modules.loss.MSELoss
     if not out_fp_base:
-        out_fp_base = os.path.join("data", "processed")
+        out_fp_base = os.path.normpath(os.path.join("data", "processed"))
     if not os.path.exists(out_fp_base):
         os.makedirs(out_fp_base)
     with torch.no_grad():
@@ -96,10 +96,10 @@ def main(
             logging.info(
                 "Starting inference on %s of %s", lroc_raw_img_idx, len(inf_dataset)
             )
-            lroc_id = inf_dataset.samples[lroc_raw_img_idx][0].split("/")[-1]
+            lroc_id = inf_dataset.samples[lroc_raw_img_idx][0].split(os.sep)[-1]
             lroc_id = lroc_id.split("_")[0]
             logging.info("Working on LROC raw with id: %s", lroc_id)
-            out_fp = os.path.join(out_fp_base, lroc_id + ".lam")
+            out_fp = os.path.normpath(os.path.join(out_fp_base, lroc_id + ".lam"))
             if os.path.exists(out_fp) and keep_existing_lams:
                 logging.info(
                     "Out file %s already exists, skipping inference for %s.",

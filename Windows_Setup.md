@@ -25,7 +25,7 @@ Finally, install the required libraries using the supplied requirements_windows.
 ```bash
 pip install -r requirements_windows.txt
 ```
-Windows requires a different version of torch and torchvision than what is written int he requirements.txt file that can be used for Linux.
+Windows requires a different version of torch and torchvision than what is written in the requirements.txt file that can be used for Linux.
 
 Please reference this file for any errors/issues/troubleshooting that may come up as you move forward.
 You may now return to the README file and continue following the instructions.

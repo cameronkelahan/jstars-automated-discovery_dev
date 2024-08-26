@@ -57,7 +57,16 @@ To generate a precision-recall curve and a KDE plot for the 'pit' feature:
 python lam/evaluate.py --feature_str pit --make_pr_curve --make_kde_plot
 ```
 
-Other features to try this pipeline on include 'crater', 'imp', 'rockfall', and Apollo 16 landing site 'ap16', replacing 'pit' with these features in the commands above.
+In place of 'pit' in the above example pipeline, other features to try include:
+- 'crater'
+- 'imp'  (irregular mare patch)
+- 'rockfall'
+- 'ap12' (Apollo 12 landing site)
+- 'ap15' (Apollo 15 landing site)
+- 'ap16' (Apollo 16 landing site)
+- 'ap17' (Apollo 17 landing site)
+- 's3'   (Surveyor 3)
+[//]: # ('squiggle' and 'weird' options are also available, but confirming that we want them displayed or not)
 
 ### Known issues
 

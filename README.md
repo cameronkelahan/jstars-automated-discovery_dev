@@ -24,6 +24,7 @@ The DOI for this paper is [https://doi.org/10.1109/JSTARS.2024.3369101](https://
 
 
 ## Setup
+(NOTE: If you are on a Windows machine, please refer to the Windows_Setuo.md file for this section.)
 ```bash
 python3 -m venv jst
 source jst/bin/activate
